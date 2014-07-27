@@ -78,6 +78,30 @@ bool HelloWorld::init()
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
     
+    
+    
+    //正则例子 匹配出所有www开头com结尾的链接
+    //例子一
+    string originStr1("<Http>www.cocos.org</Http>");
+    log("%s",originStr1.c_str());
+    
+    const regex pattern1("www.+com");//这个是匹配表达式。注意.+是匹配原字符 .代表任意自负 ＋代表匹配任意多次。不懂可以去看看正则表达式原字符
+    
+    printRegexResult(originStr1,pattern1);
+    
+    //例子二
+    string originStr2("<Http>www.cocos.org</Http>\
+                     <Http>www.baidu.com</Http>\
+                     <image>pic.png</image>\
+                     <Http>www.google.com</Http>\
+                     <Music>MySond.mp3<Music>");
+    log("%s",originStr2.c_str());
+    
+    const regex pattern2("www[^(www)]+?com");
+    
+    printRegexResult(originStr2,pattern2);
+    
+
     return true;
 }
 
@@ -85,6 +109,22 @@ bool HelloWorld::init()
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     getChineseAndPhoneticRequest("apple");
+}
+
+void HelloWorld::printRegexResult(string word,regex pattern)
+{
+    std::smatch result;
+    
+    bool match = std::regex_search(word, result, pattern);
+    
+    if(match)
+    {
+        for(size_t i = 0; i < result.size(); i++)
+        {
+            string convertStr(result[i]);
+            log("result=%s",convertStr.c_str());
+        }
+    }
 }
 
 void HelloWorld::getChineseAndPhoneticRequest(string word)
