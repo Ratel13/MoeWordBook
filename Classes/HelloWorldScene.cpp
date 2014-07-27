@@ -1,12 +1,12 @@
 #include "HelloWorldScene.h"
-//#include "cocos-ext.h"
+#include "cocos-ext.h"
 #include "PersonalApi.h"
 
 
 USING_NS_CC;
-//using namespace cocos2d::extension;
+using namespace cocos2d::extension;
 using namespace std;
-//using namespace network;
+using namespace network;
 
 Scene* HelloWorld::createScene()
 {
@@ -108,7 +108,7 @@ bool HelloWorld::init()
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    //getChineseAndPhoneticRequest("apple");
+    getChineseAndPhoneticRequest("apple");
 }
 
 void HelloWorld::printRegexResult(string word,regex pattern)
@@ -126,7 +126,7 @@ void HelloWorld::printRegexResult(string word,regex pattern)
         }
     }
 }
-/*
+
 void HelloWorld::getChineseAndPhoneticRequest(string word)
 {
     HttpRequest* request = new HttpRequest();
@@ -176,8 +176,6 @@ void HelloWorld::onHttpRequestCompleted1(HttpClient *sender, HttpResponse *respo
         //printf("%c", (*buffer)[i]);
         resultStr = resultStr+(*buffer)[i];
     }
-    //printf("\n");
     log("%s",resultStr.c_str());
 
 }
-*/

@@ -2,7 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-//#include "HttpClient.h"
+#include "HttpClient.h"
 #include <regex>
 
 class HelloWorld : public cocos2d::Layer
@@ -22,10 +22,8 @@ public:
     
     void printRegexResult(std::string word,std::regex pattern);
     
-    /*
     void getChineseAndPhoneticRequest(std::string word);
     void onHttpRequestCompleted1(cocos2d::network::HttpClient *sender, cocos2d::network::HttpResponse *response);
-     */
 };
 
 #endif // __HELLOWORLD_SCENE_H__
