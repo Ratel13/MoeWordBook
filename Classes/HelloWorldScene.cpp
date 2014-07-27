@@ -1,6 +1,12 @@
 #include "HelloWorldScene.h"
+#include "cocos-ext.h"
+#include "PersonalApi.h"
+
 
 USING_NS_CC;
+using namespace cocos2d::extension;
+using namespace std;
+using namespace network;
 
 Scene* HelloWorld::createScene()
 {
@@ -78,14 +84,59 @@ bool HelloWorld::init()
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
+    getChineseAndPhoneticRequest("apple");
+}
 
-    Director::getInstance()->end();
+void HelloWorld::getChineseAndPhoneticRequest(string word)
+{
+    HttpRequest* request = new HttpRequest();
+    string worklink = "http://dict.youdao.com/search?q="+word+"&keyfrom=fanyi.smartResult";
+    
+    request->setUrl(worklink.c_str());//识别单词意思，英标
+    request->setRequestType(HttpRequest::Type::GET);
+    request->setResponseCallback(this, httpresponse_selector(HelloWorld::onHttpRequestCompleted1));
+    request->setTag("GET test1");
+    HttpClient::getInstance()->send(request);
+    request->release();
+}
+void HelloWorld::onHttpRequestCompleted1(HttpClient *sender, HttpResponse *response)
+{
+    if (!response)
+    {
+        return;
+    }
+    
+    // You can get original request type from: response->request->reqType
+    if (0 != strlen(response->getHttpRequest()->getTag()))
+    {
+        log("%s completed", response->getHttpRequest()->getTag());
+    }
+    
+    int statusCode = response->getResponseCode();
+    char statusString[64] = {};
+    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    log("statusString: %s", statusString);
+    log("response code: %d", statusCode);
+    
+    if (!response->isSucceed())
+    {
+        log("response failed");
+        log("error buffer: %s", response->getErrorBuffer());
+        return;
+    }
+    
+    
+    // dump data
+    
+    vector<char> *buffer = response->getResponseData();
+    string resultStr;
+    printf("Http Test, dump data: ");
+    for (unsigned int i = 0; i < buffer->size(); i++)
+    {
+        //printf("%c", (*buffer)[i]);
+        resultStr = resultStr+(*buffer)[i];
+    }
+    //printf("\n");
+    log("%s",resultStr.c_str());
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
 }
